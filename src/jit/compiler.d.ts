@@ -50,7 +50,6 @@ export declare class JitCompiler {
     compileModuleAsync(moduleType: Type): Promise<object>;
     compileModuleAndAllComponentsSync(moduleType: Type): ModuleWithComponentFactories;
     compileModuleAndAllComponentsAsync(moduleType: Type): Promise<ModuleWithComponentFactories>;
-    getNgContentSelectors(component: Type): string[];
     getComponentFactory(component: Type): object;
     loadAotSummaries(summaries: () => any[]): void;
     hasAotSummary(ref: Type): boolean;
@@ -64,6 +63,7 @@ export declare class JitCompiler {
     private _createCompiledHostTemplate(compType, ngModule);
     private _createCompiledTemplate(compMeta, ngModule);
     private _compileTemplate(template);
+    private _parseTemplate(compMeta, ngModule, directiveIdentifiers);
     private _resolveStylesCompileResult(result, externalStylesheetsByModuleUrl);
     private _resolveAndEvalStylesCompileResult(result, externalStylesheetsByModuleUrl);
     private _interpretOrJit(sourceUrl, statements);

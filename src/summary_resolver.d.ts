@@ -17,8 +17,9 @@ export declare abstract class SummaryResolver<T> {
     abstract toSummaryFileName(fileName: string, referringSrcFileName: string): string;
     abstract fromSummaryFileName(fileName: string, referringLibFileName: string): string;
     abstract resolveSummary(reference: T): Summary<T> | null;
-    abstract getSymbolsOf(filePath: string): T[];
+    abstract getSymbolsOf(filePath: string): T[] | null;
     abstract getImportAs(reference: T): T;
+    abstract getKnownModuleName(fileName: string): string | null;
     abstract addSummary(summary: Summary<T>): void;
 }
 export declare class JitSummaryResolver implements SummaryResolver<Type> {
@@ -29,5 +30,6 @@ export declare class JitSummaryResolver implements SummaryResolver<Type> {
     resolveSummary(reference: Type): Summary<Type> | null;
     getSymbolsOf(): Type[];
     getImportAs(reference: Type): Type;
+    getKnownModuleName(fileName: string): null;
     addSummary(summary: Summary<Type>): void;
 }

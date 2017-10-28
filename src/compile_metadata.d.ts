@@ -8,53 +8,7 @@
 import { StaticSymbol } from './aot/static_symbol';
 import { ChangeDetectionStrategy, SchemaMetadata, Type, ViewEncapsulation } from './core';
 import { LifecycleHooks } from './lifecycle_reflector';
-export declare class CompileAnimationEntryMetadata {
-    name: string | null;
-    definitions: CompileAnimationStateMetadata[] | null;
-    constructor(name?: string | null, definitions?: CompileAnimationStateMetadata[] | null);
-}
-export declare abstract class CompileAnimationStateMetadata {
-}
-export declare class CompileAnimationStateDeclarationMetadata extends CompileAnimationStateMetadata {
-    stateNameExpr: string;
-    styles: CompileAnimationStyleMetadata;
-    constructor(stateNameExpr: string, styles: CompileAnimationStyleMetadata);
-}
-export declare class CompileAnimationStateTransitionMetadata extends CompileAnimationStateMetadata {
-    stateChangeExpr: string | StaticSymbol | ((stateA: string, stateB: string) => boolean);
-    steps: CompileAnimationMetadata;
-    constructor(stateChangeExpr: string | StaticSymbol | ((stateA: string, stateB: string) => boolean), steps: CompileAnimationMetadata);
-}
-export declare abstract class CompileAnimationMetadata {
-}
-export declare class CompileAnimationKeyframesSequenceMetadata extends CompileAnimationMetadata {
-    steps: CompileAnimationStyleMetadata[];
-    constructor(steps?: CompileAnimationStyleMetadata[]);
-}
-export declare class CompileAnimationStyleMetadata extends CompileAnimationMetadata {
-    offset: number;
-    styles: Array<string | {
-        [key: string]: string | number;
-    }> | null;
-    constructor(offset: number, styles?: Array<string | {
-        [key: string]: string | number;
-    }> | null);
-}
-export declare class CompileAnimationAnimateMetadata extends CompileAnimationMetadata {
-    timings: string | number;
-    styles: CompileAnimationStyleMetadata | CompileAnimationKeyframesSequenceMetadata | null;
-    constructor(timings?: string | number, styles?: CompileAnimationStyleMetadata | CompileAnimationKeyframesSequenceMetadata | null);
-}
-export declare abstract class CompileAnimationWithStepsMetadata extends CompileAnimationMetadata {
-    steps: CompileAnimationMetadata[] | null;
-    constructor(steps?: CompileAnimationMetadata[] | null);
-}
-export declare class CompileAnimationSequenceMetadata extends CompileAnimationWithStepsMetadata {
-    constructor(steps?: CompileAnimationMetadata[] | null);
-}
-export declare class CompileAnimationGroupMetadata extends CompileAnimationWithStepsMetadata {
-    constructor(steps?: CompileAnimationMetadata[] | null);
-}
+import { ParseTreeResult as HtmlParseTreeResult } from './ml_parser/parser';
 export declare function identifierName(compileIdentifier: CompileIdentifierMetadata | null | undefined): string | null;
 export declare function identifierModuleUrl(compileIdentifier: CompileIdentifierMetadata): string;
 export declare function viewClassName(compType: any, embeddedTemplateIndex: number): string;
@@ -143,7 +97,6 @@ export declare class CompileStylesheetMetadata {
  * Summary Metadata regarding compilation of a template.
  */
 export interface CompileTemplateSummary {
-    animations: string[] | null;
     ngContentSelectors: string[];
     encapsulation: ViewEncapsulation | null;
 }
@@ -154,6 +107,7 @@ export declare class CompileTemplateMetadata {
     encapsulation: ViewEncapsulation | null;
     template: string | null;
     templateUrl: string | null;
+    htmlAst: HtmlParseTreeResult | null;
     isInline: boolean;
     styles: string[];
     styleUrls: string[];
@@ -162,10 +116,11 @@ export declare class CompileTemplateMetadata {
     ngContentSelectors: string[];
     interpolation: [string, string] | null;
     preserveWhitespaces: boolean;
-    constructor({encapsulation, template, templateUrl, styles, styleUrls, externalStylesheets, animations, ngContentSelectors, interpolation, isInline, preserveWhitespaces}: {
+    constructor({encapsulation, template, templateUrl, htmlAst, styles, styleUrls, externalStylesheets, animations, ngContentSelectors, interpolation, isInline, preserveWhitespaces}: {
         encapsulation: ViewEncapsulation | null;
         template: string | null;
         templateUrl: string | null;
+        htmlAst: HtmlParseTreeResult | null;
         styles: string[];
         styleUrls: string[];
         externalStylesheets: CompileStylesheetMetadata[];
@@ -302,10 +257,6 @@ export declare class CompileDirectiveMetadata {
     });
     toSummary(): CompileDirectiveSummary;
 }
-/**
- * Construct {@link CompileDirectiveMetadata} from {@link ComponentTypeMetadata} and a selector.
- */
-export declare function createHostComponentMeta(hostTypeReference: any, compMeta: CompileDirectiveMetadata, hostViewType: StaticSymbol | ProxyClass): CompileDirectiveMetadata;
 export interface CompilePipeSummary extends CompileTypeSummary {
     type: CompileTypeMetadata;
     name: string;
@@ -410,7 +361,6 @@ export declare class ProviderMeta {
     });
 }
 export declare function flatten<T>(list: Array<T | T[]>): T[];
-export declare function sourceUrl(url: string): string;
 export declare function templateSourceUrl(ngModuleType: CompileIdentifierMetadata, compMeta: {
     type: CompileIdentifierMetadata;
 }, templateMeta: {
