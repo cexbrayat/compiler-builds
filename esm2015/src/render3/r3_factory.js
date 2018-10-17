@@ -41,26 +41,6 @@ export var R3ResolvedDependencyType;
      * The dependency is for the `Injector` type itself.
      */
     R3ResolvedDependencyType[R3ResolvedDependencyType["Injector"] = 2] = "Injector";
-    /**
-     * The dependency is for `ElementRef`.
-     */
-    R3ResolvedDependencyType[R3ResolvedDependencyType["ElementRef"] = 3] = "ElementRef";
-    /**
-     * The dependency is for `TemplateRef`.
-     */
-    R3ResolvedDependencyType[R3ResolvedDependencyType["TemplateRef"] = 4] = "TemplateRef";
-    /**
-     * The dependency is for `ViewContainerRef`.
-     */
-    R3ResolvedDependencyType[R3ResolvedDependencyType["ViewContainerRef"] = 5] = "ViewContainerRef";
-    /**
-     * The dependency is for `ChangeDetectorRef`.
-     */
-    R3ResolvedDependencyType[R3ResolvedDependencyType["ChangeDetectorRef"] = 6] = "ChangeDetectorRef";
-    /**
-     * The dependency is for `Renderer2`.
-     */
-    R3ResolvedDependencyType[R3ResolvedDependencyType["Renderer2"] = 7] = "Renderer2";
 })(R3ResolvedDependencyType || (R3ResolvedDependencyType = {}));
 /**
  * Construct a factory function expression for the given `R3FactoryMetadata`.
@@ -165,16 +145,6 @@ function compileInjectDependency(dep, injectFn) {
         case R3ResolvedDependencyType.Attribute:
             // In the case of attributes, the attribute name in question is given as the token.
             return o.importExpr(R3.injectAttribute).callFn([dep.token]);
-        case R3ResolvedDependencyType.ElementRef:
-            return o.importExpr(R3.injectElementRef).callFn([]);
-        case R3ResolvedDependencyType.TemplateRef:
-            return o.importExpr(R3.injectTemplateRef).callFn([]);
-        case R3ResolvedDependencyType.ViewContainerRef:
-            return o.importExpr(R3.injectViewContainerRef).callFn([]);
-        case R3ResolvedDependencyType.ChangeDetectorRef:
-            return o.importExpr(R3.injectChangeDetectorRef).callFn([]);
-        case R3ResolvedDependencyType.Renderer2:
-            return o.importExpr(R3.injectRenderer2).callFn([]);
         default:
             return unsupported(`Unknown R3ResolvedDependencyType: ${R3ResolvedDependencyType[dep.resolved]}`);
     }
@@ -187,31 +157,15 @@ export function dependenciesFromGlobalMetadata(type, outputCtx, reflector) {
     // Use the `CompileReflector` to look up references to some well-known Angular types. These will
     // be compared with the token to statically determine whether the token has significance to
     // Angular, and set the correct `R3ResolvedDependencyType` as a result.
-    const elementRef = reflector.resolveExternalReference(Identifiers.ElementRef);
-    const templateRef = reflector.resolveExternalReference(Identifiers.TemplateRef);
-    const viewContainerRef = reflector.resolveExternalReference(Identifiers.ViewContainerRef);
     const injectorRef = reflector.resolveExternalReference(Identifiers.Injector);
-    const renderer2 = reflector.resolveExternalReference(Identifiers.Renderer2);
     // Iterate through the type's DI dependencies and produce `R3DependencyMetadata` for each of them.
     const deps = [];
     for (let dependency of type.diDeps) {
         if (dependency.token) {
             const tokenRef = tokenReference(dependency.token);
             let resolved = R3ResolvedDependencyType.Token;
-            if (tokenRef === elementRef) {
-                resolved = R3ResolvedDependencyType.ElementRef;
-            }
-            else if (tokenRef === templateRef) {
-                resolved = R3ResolvedDependencyType.TemplateRef;
-            }
-            else if (tokenRef === viewContainerRef) {
-                resolved = R3ResolvedDependencyType.ViewContainerRef;
-            }
-            else if (tokenRef === injectorRef) {
+            if (tokenRef === injectorRef) {
                 resolved = R3ResolvedDependencyType.Injector;
-            }
-            else if (tokenRef === renderer2) {
-                resolved = R3ResolvedDependencyType.Renderer2;
             }
             else if (dependency.isAttribute) {
                 resolved = R3ResolvedDependencyType.Attribute;

@@ -22,6 +22,10 @@ export var I18N_ATTR_PREFIX = 'i18n-';
 /** I18n separators for metadata **/
 export var MEANING_SEPARATOR = '|';
 export var ID_SEPARATOR = '@@';
+/** Placeholder wrapper for i18n expressions **/
+export var I18N_PLACEHOLDER_SYMBOL = '�';
+/** Non bindable attribute name **/
+export var NON_BINDABLE_ATTR = 'ngNonBindable';
 /**
  * Creates an allocator for a temporary variable.
  *
@@ -48,6 +52,20 @@ export function invalid(arg) {
 }
 export function isI18NAttribute(name) {
     return name === I18N_ATTR || name.startsWith(I18N_ATTR_PREFIX);
+}
+export function wrapI18nPlaceholder(content) {
+    return "" + I18N_PLACEHOLDER_SYMBOL + content + I18N_PLACEHOLDER_SYMBOL;
+}
+export function assembleI18nTemplate(strings) {
+    if (!strings.length)
+        return '';
+    var acc = '';
+    var lastIdx = strings.length - 1;
+    for (var i = 0; i < lastIdx; i++) {
+        acc += "" + strings[i] + wrapI18nPlaceholder(i);
+    }
+    acc += strings[lastIdx];
+    return acc;
 }
 export function asLiteral(value) {
     if (Array.isArray(value)) {
@@ -76,7 +94,15 @@ export function trimTrailingNulls(parameters) {
 }
 export function getQueryPredicate(query, constantPool) {
     if (Array.isArray(query.predicate)) {
-        return constantPool.getConstLiteral(o.literalArr(query.predicate.map(function (selector) { return o.literal(selector); })));
+        var predicate_1 = [];
+        query.predicate.forEach(function (selector) {
+            // Each item in predicates array may contain strings with comma-separated refs
+            // (for ex. 'ref, ref1, ..., refN'), thus we extract individual refs and store them
+            // as separate array entities
+            var selectors = selector.split(',').map(function (token) { return o.literal(token.trim()); });
+            predicate_1.push.apply(predicate_1, selectors);
+        });
+        return constantPool.getConstLiteral(o.literalArr(predicate_1), true);
     }
     else {
         return query.predicate;
@@ -96,4 +122,24 @@ var DefinitionMap = /** @class */ (function () {
     return DefinitionMap;
 }());
 export { DefinitionMap };
+/**
+ * Extract a map of properties to values for a given element or template node, which can be used
+ * by the directive matching machinery.
+ *
+ * @param elOrTpl the element or template in question
+ * @return an object set up for directive matching. For attributes on the element/template, this
+ * object maps a property name to its (static) value. For any bindings, this map simply maps the
+ * property name to an empty string.
+ */
+export function getAttrsForDirectiveMatching(elOrTpl) {
+    var attributesMap = {};
+    elOrTpl.attributes.forEach(function (a) {
+        if (!isI18NAttribute(a.name)) {
+            attributesMap[a.name] = a.value;
+        }
+    });
+    elOrTpl.inputs.forEach(function (i) { attributesMap[i.name] = ''; });
+    elOrTpl.outputs.forEach(function (o) { attributesMap[o.name] = ''; });
+    return attributesMap;
+}
 //# sourceMappingURL=util.js.map

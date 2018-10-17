@@ -18,12 +18,12 @@ export function compileNgModule(meta) {
     var moduleType = meta.type, bootstrap = meta.bootstrap, declarations = meta.declarations, imports = meta.imports, exports = meta.exports;
     var expression = o.importExpr(R3.defineNgModule).callFn([mapToMapExpression({
             type: moduleType,
-            bootstrap: o.literalArr(bootstrap),
+            bootstrap: o.literalArr(bootstrap.map(function (ref) { return ref.value; })),
             declarations: o.literalArr(declarations.map(function (ref) { return ref.value; })),
             imports: o.literalArr(imports.map(function (ref) { return ref.value; })),
             exports: o.literalArr(exports.map(function (ref) { return ref.value; })),
         })]);
-    var type = new o.ExpressionType(o.importExpr(R3.NgModuleDef, [
+    var type = new o.ExpressionType(o.importExpr(R3.NgModuleDefWithMeta, [
         new o.ExpressionType(moduleType), tupleTypeOf(declarations), tupleTypeOf(imports),
         tupleTypeOf(exports)
     ]));

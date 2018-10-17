@@ -168,7 +168,7 @@ var JitCompiler = /** @class */ (function () {
                 }
             });
             localModuleMeta.entryComponents.forEach(function (entryComponentType) {
-                if (!_this.hasAotSummary(entryComponentType.componentType.reference)) {
+                if (!_this.hasAotSummary(entryComponentType.componentType)) {
                     var moduleMeta = moduleByJitDirective.get(entryComponentType.componentType);
                     templates.add(_this._createCompiledHostTemplate(entryComponentType.componentType, moduleMeta));
                 }

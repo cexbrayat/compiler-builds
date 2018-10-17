@@ -115,7 +115,8 @@ var CompileTemplateMetadata = /** @class */ (function () {
         return {
             ngContentSelectors: this.ngContentSelectors,
             encapsulation: this.encapsulation,
-            styles: this.styles
+            styles: this.styles,
+            animations: this.animations
         };
     };
     return CompileTemplateMetadata;

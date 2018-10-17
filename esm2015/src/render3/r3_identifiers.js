@@ -26,7 +26,7 @@ Identifiers.elementContainerStart = { name: 'ɵEC', moduleName: CORE };
 Identifiers.elementContainerEnd = { name: 'ɵeC', moduleName: CORE };
 Identifiers.elementStyling = { name: 'ɵelementStyling', moduleName: CORE };
 Identifiers.elementStylingMap = { name: 'ɵelementStylingMap', moduleName: CORE };
-Identifiers.elementStyleProp = { name: 'ɵelementStylingProp', moduleName: CORE };
+Identifiers.elementStyleProp = { name: 'ɵelementStyleProp', moduleName: CORE };
 Identifiers.elementStylingApply = { name: 'ɵelementStylingApply', moduleName: CORE };
 Identifiers.containerCreate = { name: 'ɵcontainer', moduleName: CORE };
 Identifiers.nextContext = { name: 'ɵnextContext', moduleName: CORE };
@@ -34,6 +34,8 @@ Identifiers.templateCreate = { name: 'ɵtemplate', moduleName: CORE };
 Identifiers.text = { name: 'ɵtext', moduleName: CORE };
 Identifiers.textBinding = { name: 'ɵtextBinding', moduleName: CORE };
 Identifiers.bind = { name: 'ɵbind', moduleName: CORE };
+Identifiers.enableBindings = { name: 'ɵenableBindings', moduleName: CORE };
+Identifiers.disableBindings = { name: 'ɵdisableBindings', moduleName: CORE };
 Identifiers.getCurrentView = { name: 'ɵgetCurrentView', moduleName: CORE };
 Identifiers.restoreView = { name: 'ɵrestoreView', moduleName: CORE };
 Identifiers.interpolation1 = { name: 'ɵinterpolation1', moduleName: CORE };
@@ -60,8 +62,12 @@ Identifiers.pipeBind2 = { name: 'ɵpipeBind2', moduleName: CORE };
 Identifiers.pipeBind3 = { name: 'ɵpipeBind3', moduleName: CORE };
 Identifiers.pipeBind4 = { name: 'ɵpipeBind4', moduleName: CORE };
 Identifiers.pipeBindV = { name: 'ɵpipeBindV', moduleName: CORE };
+Identifiers.i18nAttribute = { name: 'ɵi18nAttribute', moduleName: CORE };
+Identifiers.i18nExp = { name: 'ɵi18nExp', moduleName: CORE };
+Identifiers.i18nStart = { name: 'ɵi18nStart', moduleName: CORE };
+Identifiers.i18nEnd = { name: 'ɵi18nEnd', moduleName: CORE };
+Identifiers.i18nApply = { name: 'ɵi18nApply', moduleName: CORE };
 Identifiers.load = { name: 'ɵload', moduleName: CORE };
-Identifiers.loadDirective = { name: 'ɵloadDirective', moduleName: CORE };
 Identifiers.loadQueryList = { name: 'ɵloadQueryList', moduleName: CORE };
 Identifiers.pipe = { name: 'ɵpipe', moduleName: CORE };
 Identifiers.projection = { name: 'ɵprojection', moduleName: CORE };
@@ -69,11 +75,6 @@ Identifiers.projectionDef = { name: 'ɵprojectionDef', moduleName: CORE };
 Identifiers.reference = { name: 'ɵreference', moduleName: CORE };
 Identifiers.inject = { name: 'inject', moduleName: CORE };
 Identifiers.injectAttribute = { name: 'ɵinjectAttribute', moduleName: CORE };
-Identifiers.injectElementRef = { name: 'ɵinjectElementRef', moduleName: CORE };
-Identifiers.injectTemplateRef = { name: 'ɵinjectTemplateRef', moduleName: CORE };
-Identifiers.injectViewContainerRef = { name: 'ɵinjectViewContainerRef', moduleName: CORE };
-Identifiers.injectChangeDetectorRef = { name: 'ɵinjectChangeDetectorRef', moduleName: CORE };
-Identifiers.injectRenderer2 = { name: 'ɵinjectRenderer2', moduleName: CORE };
 Identifiers.directiveInject = { name: 'ɵdirectiveInject', moduleName: CORE };
 Identifiers.templateRefExtractor = { name: 'ɵtemplateRefExtractor', moduleName: CORE };
 Identifiers.defineBase = { name: 'ɵdefineBase', moduleName: CORE };
@@ -82,16 +83,16 @@ Identifiers.BaseDef = {
     moduleName: CORE,
 };
 Identifiers.defineComponent = { name: 'ɵdefineComponent', moduleName: CORE };
-Identifiers.ComponentDef = {
-    name: 'ɵComponentDef',
+Identifiers.ComponentDefWithMeta = {
+    name: 'ɵComponentDefWithMeta',
     moduleName: CORE,
 };
 Identifiers.defineDirective = {
     name: 'ɵdefineDirective',
     moduleName: CORE,
 };
-Identifiers.DirectiveDef = {
-    name: 'ɵDirectiveDef',
+Identifiers.DirectiveDefWithMeta = {
+    name: 'ɵDirectiveDefWithMeta',
     moduleName: CORE,
 };
 Identifiers.InjectorDef = {
@@ -102,12 +103,12 @@ Identifiers.defineInjector = {
     name: 'defineInjector',
     moduleName: CORE,
 };
-Identifiers.NgModuleDef = {
-    name: 'ɵNgModuleDef',
+Identifiers.NgModuleDefWithMeta = {
+    name: 'ɵNgModuleDefWithMeta',
     moduleName: CORE,
 };
 Identifiers.defineNgModule = { name: 'ɵdefineNgModule', moduleName: CORE };
-Identifiers.PipeDef = { name: 'ɵPipeDef', moduleName: CORE };
+Identifiers.PipeDefWithMeta = { name: 'ɵPipeDefWithMeta', moduleName: CORE };
 Identifiers.definePipe = { name: 'ɵdefinePipe', moduleName: CORE };
 Identifiers.query = { name: 'ɵquery', moduleName: CORE };
 Identifiers.queryRefresh = { name: 'ɵqueryRefresh', moduleName: CORE };

@@ -111,7 +111,8 @@ export class CompileTemplateMetadata {
         return {
             ngContentSelectors: this.ngContentSelectors,
             encapsulation: this.encapsulation,
-            styles: this.styles
+            styles: this.styles,
+            animations: this.animations
         };
     }
 }

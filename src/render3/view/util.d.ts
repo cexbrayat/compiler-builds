@@ -25,6 +25,10 @@ export declare const I18N_ATTR_PREFIX = "i18n-";
 /** I18n separators for metadata **/
 export declare const MEANING_SEPARATOR = "|";
 export declare const ID_SEPARATOR = "@@";
+/** Placeholder wrapper for i18n expressions **/
+export declare const I18N_PLACEHOLDER_SYMBOL = "\uFFFD";
+/** Non bindable attribute name **/
+export declare const NON_BINDABLE_ATTR = "ngNonBindable";
 /**
  * Creates an allocator for a temporary variable.
  *
@@ -34,6 +38,8 @@ export declare function temporaryAllocator(statements: o.Statement[], name: stri
 export declare function unsupported(feature: string): never;
 export declare function invalid<T>(arg: o.Expression | o.Statement | t.Node): never;
 export declare function isI18NAttribute(name: string): boolean;
+export declare function wrapI18nPlaceholder(content: string | number): string;
+export declare function assembleI18nTemplate(strings: Array<string>): string;
 export declare function asLiteral(value: any): o.Expression;
 export declare function conditionallyCreateMapObjectLiteral(keys: {
     [key: string]: string;
@@ -56,3 +62,15 @@ export declare class DefinitionMap {
     set(key: string, value: o.Expression | null): void;
     toLiteralMap(): o.LiteralMapExpr;
 }
+/**
+ * Extract a map of properties to values for a given element or template node, which can be used
+ * by the directive matching machinery.
+ *
+ * @param elOrTpl the element or template in question
+ * @return an object set up for directive matching. For attributes on the element/template, this
+ * object maps a property name to its (static) value. For any bindings, this map simply maps the
+ * property name to an empty string.
+ */
+export declare function getAttrsForDirectiveMatching(elOrTpl: t.Element | t.Template): {
+    [name: string]: string;
+};

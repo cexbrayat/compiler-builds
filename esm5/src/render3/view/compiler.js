@@ -28,7 +28,7 @@ function baseDirectiveFields(meta, constantPool, bindingParser) {
     definitionMap.set('type', meta.type);
     // e.g. `selectors: [['', 'someDir', '']]`
     definitionMap.set('selectors', createDirectiveSelector(meta.selector));
-    // e.g. `factory: () => new MyApp(injectElementRef())`
+    // e.g. `factory: () => new MyApp(directiveInject(ElementRef))`
     var result = compileFactoryFunction({
         name: meta.name,
         type: meta.type,
@@ -83,10 +83,7 @@ export function compileDirectiveFromMetadata(meta, constantPool, bindingParser) 
     // On the type side, remove newlines from the selector as it will need to fit into a TypeScript
     // string literal, which must be on one line.
     var selectorForType = (meta.selector || '').replace(/\n/g, '');
-    var type = new o.ExpressionType(o.importExpr(R3.DirectiveDef, [
-        typeWithParameters(meta.type, meta.typeArgumentCount),
-        new o.ExpressionType(o.literal(selectorForType))
-    ]));
+    var type = createTypeForDef(meta, R3.DirectiveDefWithMeta);
     return { expression: expression, type: type, statements: statements };
 }
 /**
@@ -177,14 +174,15 @@ export function compileComponentFromMetadata(meta, constantPool, bindingParser) 
         var strings = styleValues.map(function (str) { return o.literal(str); });
         definitionMap.set('styles', o.literalArr(strings));
     }
+    // e.g. `animations: [trigger('123', [])]`
+    if (meta.animations !== null) {
+        definitionMap.set('animations', meta.animations);
+    }
     // On the type side, remove newlines from the selector as it will need to fit into a TypeScript
     // string literal, which must be on one line.
     var selectorForType = (meta.selector || '').replace(/\n/g, '');
     var expression = o.importExpr(R3.defineComponent).callFn([definitionMap.toLiteralMap()]);
-    var type = new o.ExpressionType(o.importExpr(R3.ComponentDef, [
-        typeWithParameters(meta.type, meta.typeArgumentCount),
-        new o.ExpressionType(o.literal(selectorForType))
-    ]));
+    var type = createTypeForDef(meta, R3.ComponentDefWithMeta);
     return { expression: expression, type: type, statements: statements };
 }
 /**
@@ -221,7 +219,7 @@ export function compileComponentFromRender2(outputCtx, component, render3Ast, re
             hasNgContent: render3Ast.hasNgContent,
             ngContentSelectors: render3Ast.ngContentSelectors,
             relativeContextFilePath: '',
-        }, directives: typeMapToExpressionMap(directiveTypeBySel, outputCtx), pipes: typeMapToExpressionMap(pipeTypeByName, outputCtx), viewQueries: queriesFromGlobalMetadata(component.viewQueries, outputCtx), wrapDirectivesInClosure: false, styles: (summary.template && summary.template.styles) || EMPTY_ARRAY, encapsulation: (summary.template && summary.template.encapsulation) || core.ViewEncapsulation.Emulated });
+        }, directives: typeMapToExpressionMap(directiveTypeBySel, outputCtx), pipes: typeMapToExpressionMap(pipeTypeByName, outputCtx), viewQueries: queriesFromGlobalMetadata(component.viewQueries, outputCtx), wrapDirectivesInClosure: false, styles: (summary.template && summary.template.styles) || EMPTY_ARRAY, encapsulation: (summary.template && summary.template.encapsulation) || core.ViewEncapsulation.Emulated, animations: null });
     var res = compileComponentFromMetadata(meta, outputCtx.constantPool, bindingParser);
     // Create the partial class to be merged with the actual class.
     outputCtx.statements.push(new o.ClassStmt(name, null, [new o.ClassField(definitionField, o.INFERRED_TYPE, [o.StmtModifier.Static], res.expression)], [], new o.ClassMethod(null, [], []), []));
@@ -346,8 +344,8 @@ function createContentQueriesRefreshFunction(meta) {
         var directiveInstanceVar_1 = o.variable('instance');
         // var $tmp$: any;
         var temporary_1 = temporaryAllocator(statements_1, TEMPORARY_NAME);
-        // const $instance$ = $r3$.ɵloadDirective(dirIndex);
-        statements_1.push(directiveInstanceVar_1.set(o.importExpr(R3.loadDirective).callFn([o.variable('dirIndex')]))
+        // const $instance$ = $r3$.ɵload(dirIndex);
+        statements_1.push(directiveInstanceVar_1.set(o.importExpr(R3.load).callFn([o.variable('dirIndex')]))
             .toDeclStmt(o.INFERRED_TYPE, [o.StmtModifier.Final]));
         meta.queries.forEach(function (query, idx) {
             var loadQLArg = o.variable('queryStartIndex');
@@ -364,6 +362,34 @@ function createContentQueriesRefreshFunction(meta) {
         return o.fn(parameters, statements_1, o.INFERRED_TYPE, null, typeName ? typeName + "_ContentQueriesRefresh" : null);
     }
     return null;
+}
+function stringAsType(str) {
+    return o.expressionType(o.literal(str));
+}
+function stringMapAsType(map) {
+    var mapValues = Object.keys(map).map(function (key) { return ({
+        key: key,
+        value: o.literal(map[key]),
+        quoted: true,
+    }); });
+    return o.expressionType(o.literalMap(mapValues));
+}
+function stringArrayAsType(arr) {
+    return arr.length > 0 ? o.expressionType(o.literalArr(arr.map(function (value) { return o.literal(value); }))) :
+        o.NONE_TYPE;
+}
+function createTypeForDef(meta, typeBase) {
+    // On the type side, remove newlines from the selector as it will need to fit into a TypeScript
+    // string literal, which must be on one line.
+    var selectorForType = (meta.selector || '').replace(/\n/g, '');
+    return o.expressionType(o.importExpr(typeBase, [
+        typeWithParameters(meta.type, meta.typeArgumentCount),
+        stringAsType(selectorForType),
+        meta.exportAs !== null ? stringAsType(meta.exportAs) : o.NONE_TYPE,
+        stringMapAsType(meta.inputs),
+        stringMapAsType(meta.outputs),
+        stringArrayAsType(meta.queries.map(function (q) { return q.propertyName; })),
+    ]));
 }
 // Define and update any view queries
 function createViewQueriesFunction(meta, constantPool) {
@@ -397,7 +423,7 @@ function createHostBindingsFunction(meta, bindingParser, constantPool, allocateP
     var directiveSummary = metadataAsSummary(meta);
     // Calculate the host property bindings
     var bindings = bindingParser.createBoundHostProperties(directiveSummary, hostBindingSourceSpan);
-    var bindingContext = o.importExpr(R3.loadDirective).callFn([o.variable('dirIndex')]);
+    var bindingContext = o.importExpr(R3.load).callFn([o.variable('dirIndex')]);
     if (bindings) {
         var valueConverter = new ValueConverter(constantPool, 
         /* new nodes are illegal here */ function () { return error('Unexpected node'); }, allocatePureFunctionSlots, 

@@ -71,6 +71,8 @@ export * from './template_parser/template_parser';
 export { ViewCompiler } from './view_compiler/view_compiler';
 export { getParseErrors, isSyntaxError, syntaxError, Version } from './util';
 export * from './injectable_compiler_2';
+export { BoundAttribute as TmplAstBoundAttribute, BoundEvent as TmplAstBoundEvent, BoundText as TmplAstBoundText, Content as TmplAstContent, Element as TmplAstElement, Reference as TmplAstReference, Template as TmplAstTemplate, Text as TmplAstText, TextAttribute as TmplAstTextAttribute, Variable as TmplAstVariable, } from './render3/r3_ast';
+export * from './render3/view/t2_binder';
 export { jitExpression } from './render3/r3_jit';
 export { R3ResolvedDependencyType } from './render3/r3_factory';
 export { compileInjector, compileNgModule } from './render3/r3_module_compiler';

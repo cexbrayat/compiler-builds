@@ -78,27 +78,7 @@ export declare enum R3ResolvedDependencyType {
     /**
      * The dependency is for the `Injector` type itself.
      */
-    Injector = 2,
-    /**
-     * The dependency is for `ElementRef`.
-     */
-    ElementRef = 3,
-    /**
-     * The dependency is for `TemplateRef`.
-     */
-    TemplateRef = 4,
-    /**
-     * The dependency is for `ViewContainerRef`.
-     */
-    ViewContainerRef = 5,
-    /**
-     * The dependency is for `ChangeDetectorRef`.
-     */
-    ChangeDetectorRef = 6,
-    /**
-     * The dependency is for `Renderer2`.
-     */
-    Renderer2 = 7
+    Injector = 2
 }
 /**
  * Metadata representing a single dependency to be injected into a constructor or function call.
