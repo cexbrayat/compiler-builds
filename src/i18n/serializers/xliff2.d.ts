@@ -5,6 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/// <amd-module name="@angular/compiler/src/i18n/serializers/xliff2" />
 import * as i18n from '../i18n_ast';
 import { Serializer } from './serializer';
 export declare class Xliff2 extends Serializer {

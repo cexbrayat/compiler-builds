@@ -1,3 +1,4 @@
+/// <amd-module name="@angular/compiler/src/parse_util" />
 import { CompileIdentifierMetadata } from './compile_metadata';
 export declare class ParseLocation {
     file: ParseSourceFile;

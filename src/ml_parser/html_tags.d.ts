@@ -5,6 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/// <amd-module name="@angular/compiler/src/ml_parser/html_tags" />
 import { TagContentType, TagDefinition } from './tags';
 export declare class HtmlTagDefinition implements TagDefinition {
     private closedByChildren;

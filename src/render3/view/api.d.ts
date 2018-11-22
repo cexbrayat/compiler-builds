@@ -5,6 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/// <amd-module name="@angular/compiler/src/render3/view/api" />
 import { ViewEncapsulation } from '../../core';
 import * as o from '../../output/output_ast';
 import { ParseSourceSpan } from '../../parse_util';
@@ -80,7 +81,7 @@ export interface R3DirectiveMetadata {
      * A mapping of input field names to the property names.
      */
     inputs: {
-        [field: string]: string;
+        [field: string]: string | [string, string];
     };
     /**
      * A mapping of output field names to the property names.
@@ -97,6 +98,10 @@ export interface R3DirectiveMetadata {
      * if any.
      */
     exportAs: string | null;
+    /**
+     * The list of providers defined in the directive.
+     */
+    providers: o.Expression | null;
 }
 /**
  * Information needed to compile a component for the render3 runtime.
@@ -140,11 +145,11 @@ export interface R3ComponentMetadata extends R3DirectiveMetadata {
      */
     directives: Map<string, o.Expression>;
     /**
-     * Whether to wrap the 'directives' array, if one is generated, in a closure.
+     * Whether to wrap the 'directives' and/or `pipes` array, if one is generated, in a closure.
      *
-     * This is done when the directives contain forward references.
+     * This is done when the directives or pipes contain forward references.
      */
-    wrapDirectivesInClosure: boolean;
+    wrapDirectivesAndPipesInClosure: boolean;
     /**
      * A collection of styling data that will be applied and scoped to the component.
      */
@@ -163,6 +168,10 @@ export interface R3ComponentMetadata extends R3DirectiveMetadata {
      * A collection of animation triggers that will be used in the component template.
      */
     animations: o.Expression | null;
+    /**
+     * The list of view providers defined in the component.
+     */
+    viewProviders: o.Expression | null;
 }
 /**
  * Information needed to compile a query (view or content).
@@ -185,8 +194,8 @@ export interface R3QueryMetadata {
      */
     descendants: boolean;
     /**
-     * An expression representing a type to read from each matched node, or null if the node itself
-     * is to be returned.
+     * An expression representing a type to read from each matched node, or null if the default value
+     * for a given node is to be returned.
      */
     read: o.Expression | null;
 }

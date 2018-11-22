@@ -5,6 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/// <amd-module name="@angular/compiler/src/i18n/i18n_ast" />
 import { ParseSourceSpan } from '../parse_util';
 export declare class Message {
     nodes: Node[];
@@ -97,6 +98,7 @@ export declare class IcuPlaceholder implements Node {
     constructor(value: Icu, name: string, sourceSpan: ParseSourceSpan);
     visit(visitor: Visitor, context?: any): any;
 }
+export declare type AST = Message | Node;
 export interface Visitor {
     visitText(text: Text, context?: any): any;
     visitContainer(container: Container, context?: any): any;

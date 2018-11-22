@@ -5,22 +5,27 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/// <amd-module name="@angular/compiler/src/render3/view/template" />
 import { LocalResolver } from '../../compiler_util/expression_converter';
 import { ConstantPool } from '../../constant_pool';
 import * as core from '../../core';
 import { AST, AstMemoryEfficientTransformer, BindingPipe, LiteralArray, LiteralMap } from '../../expression_parser/ast';
+import * as i18n from '../../i18n/i18n_ast';
 import * as o from '../../output/output_ast';
-import { ParseError } from '../../parse_util';
+import { ParseError, ParseSourceSpan } from '../../parse_util';
 import { SelectorMatcher } from '../../selector';
 import { BindingParser } from '../../template_parser/binding_parser';
 import * as t from '../r3_ast';
 import { R3QueryMetadata } from './api';
+import { I18nContext } from './i18n/context';
 import { invalid } from './util';
 export declare function renderFlagCheckIfStmt(flags: core.RenderFlags, statements: o.Statement[]): o.IfStmt;
 export declare class TemplateDefinitionBuilder implements t.Visitor<void>, LocalResolver {
     private constantPool;
     private level;
     private contextName;
+    private i18nContext;
+    private templateIndex;
     private templateName;
     private viewQueries;
     private directiveMatcher;
@@ -60,17 +65,27 @@ export declare class TemplateDefinitionBuilder implements t.Visitor<void>, Local
     private _bindingScope;
     private _valueConverter;
     private _unsupported;
-    private _inI18nSection;
-    private _i18nSectionIndex;
-    private _phToNodeIdxes;
+    private i18n;
     private _pureFunctionSlots;
     private _bindingSlots;
     private fileBasedI18nSuffix;
-    constructor(constantPool: ConstantPool, parentBindingScope: BindingScope, level: number, contextName: string | null, templateName: string | null, viewQueries: R3QueryMetadata[], directiveMatcher: SelectorMatcher | null, directives: Set<o.Expression>, pipeTypeByName: Map<string, o.Expression>, pipes: Set<o.Expression>, _namespace: o.ExternalReference, relativeContextFilePath: string);
+    constructor(constantPool: ConstantPool, parentBindingScope: BindingScope, level: number, contextName: string | null, i18nContext: I18nContext | null, templateIndex: number | null, templateName: string | null, viewQueries: R3QueryMetadata[], directiveMatcher: SelectorMatcher | null, directives: Set<o.Expression>, pipeTypeByName: Map<string, o.Expression>, pipes: Set<o.Expression>, _namespace: o.ExternalReference, relativeContextFilePath: string);
     registerContextVariables(variable: t.Variable): void;
-    buildTemplateFunction(nodes: t.Node[], variables: t.Variable[], hasNgContent?: boolean, ngContentSelectors?: string[]): o.FunctionExpr;
+    buildTemplateFunction(nodes: t.Node[], variables: t.Variable[], hasNgContent?: boolean, ngContentSelectors?: string[], i18n?: i18n.AST): o.FunctionExpr;
     getLocal(name: string): o.Expression | null;
-    i18nTranslate(label: string, meta?: string): o.Expression;
+    i18nTranslate(message: i18n.Message, params?: {
+        [name: string]: o.Expression;
+    }, ref?: o.ReadVarExpr, transformFn?: (raw: o.ReadVarExpr) => o.Expression): o.Expression;
+    i18nAppendBindings(expressions: AST[]): void;
+    i18nBindProps(props: {
+        [key: string]: t.Text | t.BoundText;
+    }): {
+        [key: string]: o.Expression;
+    };
+    i18nAllocateRef(): o.ReadVarExpr;
+    i18nUpdateRef(context: I18nContext): void;
+    i18nStart(span: ParseSourceSpan | null | undefined, meta: i18n.AST, selfClosing?: boolean): void;
+    i18nEnd(span?: ParseSourceSpan | null, selfClosing?: boolean): void;
     visitContent(ngContent: t.Content): void;
     getNamespaceInstruction(namespaceKey: string | null): o.ExternalReference;
     addNamespaceInstruction(nsInstruction: o.ExternalReference, element: t.Element): void;
@@ -83,12 +98,13 @@ export declare class TemplateDefinitionBuilder implements t.Visitor<void>, Local
     readonly visitBoundEvent: typeof invalid;
     visitBoundText(text: t.BoundText): void;
     visitText(text: t.Text): void;
-    visitSingleI18nTextChild(text: t.Text, i18nMeta: string): void;
+    visitIcu(icu: t.Icu): null;
     private allocateDataSlot;
     getConstCount(): number;
     getVarCount(): number;
     private bindingContext;
     private instructionFn;
+    private processStylingInstruction;
     private creationInstruction;
     private updateInstruction;
     private allocatePureFunctionSlots;
@@ -121,13 +137,14 @@ export declare class ValueConverter extends AstMemoryEfficientTransformer {
  */
 export declare type DeclareLocalVarCallback = (scope: BindingScope, relativeLevel: number) => o.Statement[];
 /**
- * This is used when one refers to variable such as: 'let abc = x(2).$implicit`.
+ * This is used when one refers to variable such as: 'let abc = nextContext(2).$implicit`.
  * - key to the map is the string literal `"abc"`.
  * - value `retrievalLevel` is the level from which this value can be retrieved, which is 2 levels
  * up in example.
  * - value `lhs` is the left hand side which is an AST representing `abc`.
  * - value `declareLocalCallback` is a callback that is invoked when declaring the local.
  * - value `declare` is true if this value needs to be declared.
+ * - value `localRef` is true if we are storing a local reference
  * - value `priority` dictates the sorting priority of this var declaration compared
  * to other var declarations on the same retrieval level. For example, if there is a
  * context variable and a local ref accessing the same parent view, the context var
@@ -139,6 +156,7 @@ declare type BindingData = {
     declareLocalCallback?: DeclareLocalVarCallback;
     declare: boolean;
     priority: number;
+    localRef: boolean;
 };
 export declare class BindingScope implements LocalResolver {
     bindingLevel: number;
@@ -159,15 +177,16 @@ export declare class BindingScope implements LocalResolver {
      * @param lhs AST representing the left hand side of the `let lhs = rhs;`.
      * @param priority The sorting priority of this var
      * @param declareLocalCallback The callback to invoke when declaring this local var
+     * @param localRef Whether or not this is a local ref
      */
-    set(retrievalLevel: number, name: string, lhs: o.ReadVarExpr, priority?: number, declareLocalCallback?: DeclareLocalVarCallback): BindingScope;
+    set(retrievalLevel: number, name: string, lhs: o.ReadVarExpr, priority?: number, declareLocalCallback?: DeclareLocalVarCallback, localRef?: true): BindingScope;
     getLocal(name: string): (o.Expression | null);
     nestedScope(level: number): BindingScope;
     getSharedContextName(retrievalLevel: number): o.ReadVarExpr | null;
     maybeGenerateSharedContextVar(value: BindingData): void;
     generateSharedContextVar(retrievalLevel: number): void;
     getComponentProperty(name: string): o.Expression;
-    maybeRestoreView(retrievalLevel: number): void;
+    maybeRestoreView(retrievalLevel: number, localRefLookup: boolean): void;
     restoreViewStatement(): o.Statement[];
     viewSnapshotStatements(): o.Statement[];
     isListenerScope(): boolean | null;

@@ -5,6 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/// <amd-module name="@angular/compiler/src/compiler_util/expression_converter" />
 import * as cdAst from '../expression_parser/ast';
 import * as o from '../output/output_ast';
 export declare class EventHandlerVars {

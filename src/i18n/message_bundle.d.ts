@@ -5,6 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/// <amd-module name="@angular/compiler/src/i18n/message_bundle" />
 import { HtmlParser } from '../ml_parser/html_parser';
 import { InterpolationConfig } from '../ml_parser/interpolation_config';
 import { ParseError } from '../parse_util';

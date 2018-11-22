@@ -5,6 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/// <amd-module name="@angular/compiler/src/render3/r3_template_transform" />
 import * as html from '../ml_parser/ast';
 import { ParseError } from '../parse_util';
 import { BindingParser } from '../template_parser/binding_parser';

@@ -5,6 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/// <amd-module name="@angular/compiler/src/ml_parser/lexer" />
 import { ParseError, ParseSourceSpan } from '../parse_util';
 import { InterpolationConfig } from './interpolation_config';
 import { TagDefinition } from './tags';

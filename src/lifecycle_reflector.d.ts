@@ -5,6 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/// <amd-module name="@angular/compiler/src/lifecycle_reflector" />
 import { CompileReflector } from './compile_reflector';
 export declare enum LifecycleHooks {
     OnInit = 0,

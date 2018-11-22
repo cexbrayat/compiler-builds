@@ -5,6 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/// <amd-module name="@angular/compiler/src/util" />
 import { ConstantPool } from './constant_pool';
 import * as o from './output/output_ast';
 import { ParseError } from './parse_util';
@@ -68,3 +69,7 @@ export interface Console {
     log(message: string): void;
     warn(message: string): void;
 }
+declare const _global: {
+    [name: string]: any;
+};
+export { _global as global };

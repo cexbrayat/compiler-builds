@@ -5,6 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/// <amd-module name="@angular/compiler/src/aot/lazy_routes" />
 import { CompileNgModuleMetadata } from '../compile_metadata';
 import { StaticReflector } from './static_reflector';
 import { StaticSymbol } from './static_symbol';

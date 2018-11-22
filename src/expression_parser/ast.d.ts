@@ -5,6 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/// <amd-module name="@angular/compiler/src/expression_parser/ast" />
 import { SecurityContext } from '../core';
 import { ParseSourceSpan } from '../parse_util';
 export declare class ParserError {

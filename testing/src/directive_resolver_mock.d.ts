@@ -1,3 +1,4 @@
+/// <amd-module name="@angular/compiler/testing/src/directive_resolver_mock" />
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.

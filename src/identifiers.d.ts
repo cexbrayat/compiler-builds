@@ -5,6 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/// <amd-module name="@angular/compiler/src/identifiers" />
 import { CompileTokenMetadata } from './compile_metadata';
 import { CompileReflector } from './compile_reflector';
 import * as o from './output/output_ast';
@@ -59,6 +60,7 @@ export declare class Identifiers {
     static RendererType2: o.ExternalReference;
     static ViewDefinition: o.ExternalReference;
     static createComponentFactory: o.ExternalReference;
+    static setClassMetadata: o.ExternalReference;
 }
 export declare function createTokenForReference(reference: any): CompileTokenMetadata;
 export declare function createTokenForExternalReference(reflector: CompileReflector, reference: o.ExternalReference): CompileTokenMetadata;

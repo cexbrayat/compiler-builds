@@ -5,6 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/// <amd-module name="@angular/compiler/src/render3/r3_identifiers" />
 import * as o from '../output/output_ast';
 export declare class Identifiers {
     static NEW_METHOD: string;
@@ -59,11 +60,13 @@ export declare class Identifiers {
     static pipeBind3: o.ExternalReference;
     static pipeBind4: o.ExternalReference;
     static pipeBindV: o.ExternalReference;
-    static i18nAttribute: o.ExternalReference;
+    static i18n: o.ExternalReference;
+    static i18nAttributes: o.ExternalReference;
     static i18nExp: o.ExternalReference;
     static i18nStart: o.ExternalReference;
     static i18nEnd: o.ExternalReference;
     static i18nApply: o.ExternalReference;
+    static i18nPostprocess: o.ExternalReference;
     static load: o.ExternalReference;
     static loadQueryList: o.ExternalReference;
     static pipe: o.ExternalReference;
@@ -91,7 +94,7 @@ export declare class Identifiers {
     static registerContentQuery: o.ExternalReference;
     static NgOnChangesFeature: o.ExternalReference;
     static InheritDefinitionFeature: o.ExternalReference;
-    static PublicFeature: o.ExternalReference;
+    static ProvidersFeature: o.ExternalReference;
     static listener: o.ExternalReference;
     static getFactoryOf: o.ExternalReference;
     static getInheritedFactory: o.ExternalReference;

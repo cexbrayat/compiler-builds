@@ -5,6 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/// <amd-module name="@angular/compiler/src/render3/view/t2_api" />
 import { AST } from '../../expression_parser/ast';
 import { BoundAttribute, BoundEvent, Element, Node, Reference, Template, TextAttribute, Variable } from '../r3_ast';
 /**
@@ -32,7 +33,7 @@ export interface DirectiveMeta {
      * Goes from property names to field names.
      */
     inputs: {
-        [property: string]: string;
+        [property: string]: string | [string, string];
     };
     /**
      * Set of outputs which this directive claims.

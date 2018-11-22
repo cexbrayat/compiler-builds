@@ -1,3 +1,4 @@
+/// <amd-module name="@angular/compiler/src/aot/summary_serializer" />
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.

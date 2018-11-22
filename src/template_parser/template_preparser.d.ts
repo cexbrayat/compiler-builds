@@ -5,6 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/// <amd-module name="@angular/compiler/src/template_parser/template_preparser" />
 import * as html from '../ml_parser/ast';
 export declare function preparseElement(ast: html.Element): PreparsedElement;
 export declare enum PreparsedElementType {

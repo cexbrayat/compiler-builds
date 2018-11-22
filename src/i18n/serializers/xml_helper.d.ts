@@ -5,6 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/// <amd-module name="@angular/compiler/src/i18n/serializers/xml_helper" />
 export interface IVisitor {
     visitTag(tag: Tag): any;
     visitText(text: Text): any;

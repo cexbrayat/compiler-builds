@@ -5,6 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/// <amd-module name="@angular/compiler/src/i18n/serializers/serializer" />
 import * as i18n from '../i18n_ast';
 export declare abstract class Serializer {
     abstract write(messages: i18n.Message[], locale: string | null): string;

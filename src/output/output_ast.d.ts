@@ -5,6 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/// <amd-module name="@angular/compiler/src/output/output_ast" />
 import { ParseSourceSpan } from '../parse_util';
 export declare enum TypeModifier {
     Const = 0
@@ -199,7 +200,8 @@ export declare class InvokeMethodExpr extends Expression {
 export declare class InvokeFunctionExpr extends Expression {
     fn: Expression;
     args: Expression[];
-    constructor(fn: Expression, args: Expression[], type?: Type | null, sourceSpan?: ParseSourceSpan | null);
+    pure: boolean;
+    constructor(fn: Expression, args: Expression[], type?: Type | null, sourceSpan?: ParseSourceSpan | null, pure?: boolean);
     isEquivalent(e: Expression): boolean;
     isConstant(): boolean;
     visitExpression(visitor: ExpressionVisitor, context: any): any;

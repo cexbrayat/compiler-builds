@@ -5,6 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/// <amd-module name="@angular/compiler/src/render3/r3_factory" />
 import { CompileTypeMetadata } from '../compile_metadata';
 import { CompileReflector } from '../compile_reflector';
 import * as o from '../output/output_ast';
@@ -37,6 +38,10 @@ export interface R3ConstructorFactoryMetadata {
      * function could be different, and other options control how it will be invoked.
      */
     injectFn: o.ExternalReference;
+    /**
+     * Function that allows extra statements to be inserted into factory function.
+     */
+    extraStatementFn: ((instance: o.Expression) => o.Statement[]) | null;
 }
 export declare enum R3FactoryDelegateType {
     Class = 0,
@@ -74,11 +79,7 @@ export declare enum R3ResolvedDependencyType {
      *
      * The token expression is a string representing the attribute name.
      */
-    Attribute = 1,
-    /**
-     * The dependency is for the `Injector` type itself.
-     */
-    Injector = 2
+    Attribute = 1
 }
 /**
  * Metadata representing a single dependency to be injected into a constructor or function call.

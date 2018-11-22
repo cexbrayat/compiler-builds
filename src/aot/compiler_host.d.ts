@@ -5,6 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/// <amd-module name="@angular/compiler/src/aot/compiler_host" />
 import { StaticSymbolResolverHost } from './static_symbol_resolver';
 import { AotSummaryResolverHost } from './summary_resolver';
 /**

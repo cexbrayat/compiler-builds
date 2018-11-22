@@ -5,6 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/// <amd-module name="@angular/compiler/src/aot/static_symbol_resolver" />
 import { SummaryResolver } from '../summary_resolver';
 import { StaticSymbol, StaticSymbolCache } from './static_symbol';
 export declare class ResolvedStaticSymbol {

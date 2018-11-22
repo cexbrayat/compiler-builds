@@ -1,3 +1,4 @@
+/// <amd-module name="@angular/compiler/src/summary_resolver" />
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.

@@ -5,6 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/// <amd-module name="@angular/compiler/src/style_compiler" />
 import { CompileDirectiveMetadata, CompileStylesheetMetadata } from './compile_metadata';
 import { UrlResolver } from './url_resolver';
 import { OutputContext } from './util';

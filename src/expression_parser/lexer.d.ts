@@ -5,6 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/// <amd-module name="@angular/compiler/src/expression_parser/lexer" />
 export declare enum TokenType {
     Character = 0,
     Identifier = 1,
@@ -26,7 +27,7 @@ export declare class Token {
     isCharacter(code: number): boolean;
     isNumber(): boolean;
     isString(): boolean;
-    isOperator(operater: string): boolean;
+    isOperator(operator: string): boolean;
     isIdentifier(): boolean;
     isKeyword(): boolean;
     isKeywordLet(): boolean;

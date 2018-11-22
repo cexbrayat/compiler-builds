@@ -5,6 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/// <amd-module name="@angular/compiler/src/output/map_util" />
 import * as o from './output_ast';
 export declare type MapEntry = {
     key: string;
@@ -15,4 +16,4 @@ export declare type MapLiteral = MapEntry[];
 export declare function mapEntry(key: string, value: o.Expression): MapEntry;
 export declare function mapLiteral(obj: {
     [key: string]: o.Expression;
-}): o.Expression;
+}, quoted?: boolean): o.Expression;

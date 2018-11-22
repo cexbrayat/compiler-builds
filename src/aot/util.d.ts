@@ -5,6 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/// <amd-module name="@angular/compiler/src/aot/util" />
 export declare function ngfactoryFilePath(filePath: string, forceSourceFile?: boolean): string;
 export declare function stripGeneratedFileSuffix(filePath: string): string;
 export declare function isGeneratedFile(filePath: string): boolean;

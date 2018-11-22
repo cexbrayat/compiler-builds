@@ -5,6 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/// <amd-module name="@angular/compiler/testing/src/resource_loader_mock" />
 import { ResourceLoader } from '@angular/compiler';
 /**
  * A mock implementation of {@link ResourceLoader} that allows outgoing requests to be mocked

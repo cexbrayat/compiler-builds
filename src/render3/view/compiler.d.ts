@@ -5,6 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/// <amd-module name="@angular/compiler/src/render3/view/compiler" />
 import { CompileDirectiveMetadata } from '../../compile_metadata';
 import { CompileReflector } from '../../compile_reflector';
 import { ConstantPool } from '../../constant_pool';

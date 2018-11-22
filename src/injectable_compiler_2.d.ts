@@ -5,6 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/// <amd-module name="@angular/compiler/src/injectable_compiler_2" />
 import * as o from './output/output_ast';
 import { R3DependencyMetadata } from './render3/r3_factory';
 export interface InjectableDef {

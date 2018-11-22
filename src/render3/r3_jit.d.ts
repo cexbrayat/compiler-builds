@@ -5,6 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/// <amd-module name="@angular/compiler/src/render3/r3_jit" />
 import * as o from '../output/output_ast';
 /**
  * JIT compiles an expression and returns the result of executing that expression.

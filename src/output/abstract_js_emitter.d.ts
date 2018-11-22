@@ -5,6 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/// <amd-module name="@angular/compiler/src/output/abstract_js_emitter" />
 import { AbstractEmitterVisitor, EmitterVisitorContext } from './abstract_emitter';
 import * as o from './output_ast';
 export declare abstract class AbstractJsEmitterVisitor extends AbstractEmitterVisitor {

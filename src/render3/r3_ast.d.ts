@@ -5,8 +5,10 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/// <amd-module name="@angular/compiler/src/render3/r3_ast" />
 import { SecurityContext } from '../core';
 import { AST, BindingType, BoundElementProperty, ParsedEvent } from '../expression_parser/ast';
+import { AST as I18nAST } from '../i18n/i18n_ast';
 import { ParseSourceSpan } from '../parse_util';
 export interface Node {
     sourceSpan: ParseSourceSpan;
@@ -21,7 +23,8 @@ export declare class Text implements Node {
 export declare class BoundText implements Node {
     value: AST;
     sourceSpan: ParseSourceSpan;
-    constructor(value: AST, sourceSpan: ParseSourceSpan);
+    i18n?: import("@angular/compiler/src/i18n/i18n_ast").Message | import("@angular/compiler/src/i18n/i18n_ast").Node | undefined;
+    constructor(value: AST, sourceSpan: ParseSourceSpan, i18n?: import("@angular/compiler/src/i18n/i18n_ast").Message | import("@angular/compiler/src/i18n/i18n_ast").Node | undefined);
     visit<Result>(visitor: Visitor<Result>): Result;
 }
 export declare class TextAttribute implements Node {
@@ -29,7 +32,8 @@ export declare class TextAttribute implements Node {
     value: string;
     sourceSpan: ParseSourceSpan;
     valueSpan?: ParseSourceSpan | undefined;
-    constructor(name: string, value: string, sourceSpan: ParseSourceSpan, valueSpan?: ParseSourceSpan | undefined);
+    i18n?: import("@angular/compiler/src/i18n/i18n_ast").Message | import("@angular/compiler/src/i18n/i18n_ast").Node | undefined;
+    constructor(name: string, value: string, sourceSpan: ParseSourceSpan, valueSpan?: ParseSourceSpan | undefined, i18n?: import("@angular/compiler/src/i18n/i18n_ast").Message | import("@angular/compiler/src/i18n/i18n_ast").Node | undefined);
     visit<Result>(visitor: Visitor<Result>): Result;
 }
 export declare class BoundAttribute implements Node {
@@ -39,8 +43,9 @@ export declare class BoundAttribute implements Node {
     value: AST;
     unit: string | null;
     sourceSpan: ParseSourceSpan;
-    constructor(name: string, type: BindingType, securityContext: SecurityContext, value: AST, unit: string | null, sourceSpan: ParseSourceSpan);
-    static fromBoundElementProperty(prop: BoundElementProperty): BoundAttribute;
+    i18n?: import("@angular/compiler/src/i18n/i18n_ast").Message | import("@angular/compiler/src/i18n/i18n_ast").Node | undefined;
+    constructor(name: string, type: BindingType, securityContext: SecurityContext, value: AST, unit: string | null, sourceSpan: ParseSourceSpan, i18n?: import("@angular/compiler/src/i18n/i18n_ast").Message | import("@angular/compiler/src/i18n/i18n_ast").Node | undefined);
+    static fromBoundElementProperty(prop: BoundElementProperty, i18n?: I18nAST): BoundAttribute;
     visit<Result>(visitor: Visitor<Result>): Result;
 }
 export declare class BoundEvent implements Node {
@@ -63,7 +68,8 @@ export declare class Element implements Node {
     sourceSpan: ParseSourceSpan;
     startSourceSpan: ParseSourceSpan | null;
     endSourceSpan: ParseSourceSpan | null;
-    constructor(name: string, attributes: TextAttribute[], inputs: BoundAttribute[], outputs: BoundEvent[], children: Node[], references: Reference[], sourceSpan: ParseSourceSpan, startSourceSpan: ParseSourceSpan | null, endSourceSpan: ParseSourceSpan | null);
+    i18n?: import("@angular/compiler/src/i18n/i18n_ast").Message | import("@angular/compiler/src/i18n/i18n_ast").Node | undefined;
+    constructor(name: string, attributes: TextAttribute[], inputs: BoundAttribute[], outputs: BoundEvent[], children: Node[], references: Reference[], sourceSpan: ParseSourceSpan, startSourceSpan: ParseSourceSpan | null, endSourceSpan: ParseSourceSpan | null, i18n?: import("@angular/compiler/src/i18n/i18n_ast").Message | import("@angular/compiler/src/i18n/i18n_ast").Node | undefined);
     visit<Result>(visitor: Visitor<Result>): Result;
 }
 export declare class Template implements Node {
@@ -76,14 +82,16 @@ export declare class Template implements Node {
     sourceSpan: ParseSourceSpan;
     startSourceSpan: ParseSourceSpan | null;
     endSourceSpan: ParseSourceSpan | null;
-    constructor(attributes: TextAttribute[], inputs: BoundAttribute[], outputs: BoundEvent[], children: Node[], references: Reference[], variables: Variable[], sourceSpan: ParseSourceSpan, startSourceSpan: ParseSourceSpan | null, endSourceSpan: ParseSourceSpan | null);
+    i18n?: import("@angular/compiler/src/i18n/i18n_ast").Message | import("@angular/compiler/src/i18n/i18n_ast").Node | undefined;
+    constructor(attributes: TextAttribute[], inputs: BoundAttribute[], outputs: BoundEvent[], children: Node[], references: Reference[], variables: Variable[], sourceSpan: ParseSourceSpan, startSourceSpan: ParseSourceSpan | null, endSourceSpan: ParseSourceSpan | null, i18n?: import("@angular/compiler/src/i18n/i18n_ast").Message | import("@angular/compiler/src/i18n/i18n_ast").Node | undefined);
     visit<Result>(visitor: Visitor<Result>): Result;
 }
 export declare class Content implements Node {
     selectorIndex: number;
     attributes: TextAttribute[];
     sourceSpan: ParseSourceSpan;
-    constructor(selectorIndex: number, attributes: TextAttribute[], sourceSpan: ParseSourceSpan);
+    i18n?: import("@angular/compiler/src/i18n/i18n_ast").Message | import("@angular/compiler/src/i18n/i18n_ast").Node | undefined;
+    constructor(selectorIndex: number, attributes: TextAttribute[], sourceSpan: ParseSourceSpan, i18n?: import("@angular/compiler/src/i18n/i18n_ast").Message | import("@angular/compiler/src/i18n/i18n_ast").Node | undefined);
     visit<Result>(visitor: Visitor<Result>): Result;
 }
 export declare class Variable implements Node {
@@ -100,6 +108,22 @@ export declare class Reference implements Node {
     constructor(name: string, value: string, sourceSpan: ParseSourceSpan);
     visit<Result>(visitor: Visitor<Result>): Result;
 }
+export declare class Icu implements Node {
+    vars: {
+        [name: string]: BoundText;
+    };
+    placeholders: {
+        [name: string]: Text | BoundText;
+    };
+    sourceSpan: ParseSourceSpan;
+    i18n?: import("@angular/compiler/src/i18n/i18n_ast").Message | import("@angular/compiler/src/i18n/i18n_ast").Node | undefined;
+    constructor(vars: {
+        [name: string]: BoundText;
+    }, placeholders: {
+        [name: string]: Text | BoundText;
+    }, sourceSpan: ParseSourceSpan, i18n?: import("@angular/compiler/src/i18n/i18n_ast").Message | import("@angular/compiler/src/i18n/i18n_ast").Node | undefined);
+    visit<Result>(visitor: Visitor<Result>): Result;
+}
 export interface Visitor<Result = any> {
     visit?(node: Node): Result;
     visitElement(element: Element): Result;
@@ -112,6 +136,7 @@ export interface Visitor<Result = any> {
     visitBoundEvent(attribute: BoundEvent): Result;
     visitText(text: Text): Result;
     visitBoundText(text: BoundText): Result;
+    visitIcu(icu: Icu): Result;
 }
 export declare class NullVisitor implements Visitor<void> {
     visitElement(element: Element): void;
@@ -124,6 +149,7 @@ export declare class NullVisitor implements Visitor<void> {
     visitBoundEvent(attribute: BoundEvent): void;
     visitText(text: Text): void;
     visitBoundText(text: BoundText): void;
+    visitIcu(icu: Icu): void;
 }
 export declare class RecursiveVisitor implements Visitor<void> {
     visitElement(element: Element): void;
@@ -136,6 +162,7 @@ export declare class RecursiveVisitor implements Visitor<void> {
     visitBoundEvent(attribute: BoundEvent): void;
     visitText(text: Text): void;
     visitBoundText(text: BoundText): void;
+    visitIcu(icu: Icu): void;
 }
 export declare class TransformVisitor implements Visitor<Node> {
     visitElement(element: Element): Node;
@@ -148,6 +175,7 @@ export declare class TransformVisitor implements Visitor<Node> {
     visitBoundEvent(attribute: BoundEvent): Node;
     visitText(text: Text): Node;
     visitBoundText(text: BoundText): Node;
+    visitIcu(icu: Icu): Node;
 }
 export declare function visitAll<Result>(visitor: Visitor<Result>, nodes: Node[]): Result[];
 export declare function transformAll<Result extends Node>(visitor: Visitor<Node>, nodes: Result[]): Result[];

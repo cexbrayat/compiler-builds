@@ -5,6 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/// <amd-module name="@angular/compiler/src/output/ts_emitter" />
 import { EmitterVisitorContext, OutputEmitter } from './abstract_emitter';
 import * as o from './output_ast';
 export declare function debugOutputAstAsTypeScript(ast: o.Statement | o.Expression | o.Type | any[]): string;
